@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
  * Created by Administrator on 2016/2/25.
  *
  */
+
 @Entity
 @Table(name = "terminals")
 public class TerminalModel {

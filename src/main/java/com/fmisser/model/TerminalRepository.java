@@ -1,8 +1,8 @@
 package com.fmisser.model;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  *
  */
 
-@Transactional
-public interface TerminalDao extends CrudRepository<TerminalModel, Long> {
+@Repository
+public interface TerminalRepository extends CrudRepository<TerminalModel, Long> {
     List<TerminalModel> findByName(String name);
 }
