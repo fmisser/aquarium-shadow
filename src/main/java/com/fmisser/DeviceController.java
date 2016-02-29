@@ -1,9 +1,10 @@
 package com.fmisser;
 
-import com.fmisser.model.TerminalRepository;
-import com.fmisser.model.TerminalModel;
+import com.fmisser.model.DeviceRepository;
+import com.fmisser.model.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,13 +16,22 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping(value = "/terminal")
-public class TerminalController {
+@RequestMapping(value = "/device")
+public class DeviceController {
 
-    private static final String PAGE = "terminal page";
+    private static final String PAGE = "device page";
 
     @Autowired
-    private TerminalRepository terminalRepository;
+    private DeviceRepository deviceRepository;
+
+    /**
+     * GET /index
+     */
+    @RequestMapping("")
+    @ResponseBody
+    public String index() {
+        return PAGE;
+    }
 
     /**
      * GET /info
@@ -37,10 +47,15 @@ public class TerminalController {
      */
     @RequestMapping("/create")
     @ResponseBody
-    public String create(String name) {
-        TerminalModel model = new TerminalModel(name);
-        terminalRepository.save(model);
-        String id = java.lang.String.valueOf(model.getId());
+    public String create(String name, long type, long status, String number, String intro) {
+        Device device;
+        if (StringUtils.isEmpty(intro)) {
+            device = new Device(name, type, status, number);
+        } else {
+            device = new Device(name, type, status, number, intro);
+        }
+        deviceRepository.save(device);
+        String id = java.lang.String.valueOf(device.getId());
         return "Terminal successfully created with id= " + id;
     }
 
@@ -50,8 +65,7 @@ public class TerminalController {
     @RequestMapping("/delete")
     @ResponseBody
     public String delete(long id) {
-        TerminalModel model = new TerminalModel(id);
-        terminalRepository.delete(model);
+        deviceRepository.delete(id);
         return "Terminal successfully deleted";
     }
 
@@ -61,7 +75,7 @@ public class TerminalController {
     @RequestMapping("/get-by-name")
     @ResponseBody
     public String getByName(String name) {
-        List<TerminalModel> models = terminalRepository.findByName(name);
+        List<Device> models = deviceRepository.findByName(name);
         String id = String.valueOf(models.get(0).getId());
         return "The Terminal id is: " + id;
     }
@@ -72,9 +86,9 @@ public class TerminalController {
     @RequestMapping("/update")
     @ResponseBody
     public String updateTerminal(long id, String name) {
-        TerminalModel model = terminalRepository.findOne(id);
+        Device model = deviceRepository.findOne(id);
         model.setName(name);
-        terminalRepository.save(model);
+        deviceRepository.save(model);
         return "Terminal successfully updated";
     }
 }

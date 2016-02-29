@@ -11,6 +11,6 @@ import java.util.List;
  */
 
 @Repository
-public interface TerminalRepository extends CrudRepository<TerminalModel, Long> {
-    List<TerminalModel> findByName(String name);
+public interface DeviceRepository extends CrudRepository<Device, Long> {
+    List<Device> findByName(String name);
 }
